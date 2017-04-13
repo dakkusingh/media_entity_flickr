@@ -28,7 +28,7 @@ TODO - Flickr API for Drupal 8 does not exist yet.
 ## Project Code
 
 * GitHub
-[lightning_media_flickr](https://www.drupal.org/project/lightning_media_flickr) | [media_entity_flickr](https://github.com/dakkusingh/media_entity_flickr)
+[lightning_media_flickr](https://github.com/dakkusingh/lightning_media_flickr) | [media_entity_flickr](https://github.com/dakkusingh/media_entity_flickr)
 
 * Drupal.org
-[lightning_media_flickr](https://github.com/dakkusingh/lightning_media_flickr) | [media_entity_flickr](https://www.drupal.org/project/media_entity_flickr)
+[lightning_media_flickr](https://www.drupal.org/project/lightning_media_flickr) | [media_entity_flickr](https://www.drupal.org/project/media_entity_flickr)
