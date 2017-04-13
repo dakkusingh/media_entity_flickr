@@ -128,6 +128,7 @@ class Flickr extends MediaTypeBase {
       return $matches['shortcode'];
     }
 
+    // TODO Add this once Flickr API is ready.
     // If we have auth settings return the other fields.
     if ($this->configuration['use_flickr_api'] && $flickr = $this->fetchFlickr($matches['shortcode'])) {
       switch ($name) {
@@ -216,12 +217,16 @@ class Flickr extends MediaTypeBase {
 
     $form['use_flickr_api'] = [
       '#type' => 'select',
-      '#title' => $this->t('Whether to use Flickr api to fetch photos or not.'),
+      '#title' => $this->t('Use Flickr api to fetch photos.'),
       '#description' => $this->t("In order to use Flickr's api you have to create a developer account and an application. For more information consult the readme file."),
       '#default_value' => empty($this->configuration['use_flickr_api']) ? 0 : $this->configuration['use_flickr_api'],
+
+      // TODO Add this once Flickr API is ready.
+      '#disabled' => TRUE,
       '#options' => [
         0 => $this->t('No'),
-        1 => $this->t('Yes'),
+        // TODO Add this once Flickr API is ready.
+        // 1 => $this->t('Yes'),
       ],
     ];
 
@@ -271,13 +276,11 @@ class Flickr extends MediaTypeBase {
    */
   protected function matchRegexp(MediaInterface $media) {
     $matches = array();
-    //ksm($this->configuration['source_field']);
     if (isset($this->configuration['source_field'])) {
       $source_field = $this->configuration['source_field'];
       if ($media->hasField($source_field)) {
         $property_name = $media->{$source_field}->first()->mainPropertyName();
         foreach (static::$validationRegexp as $pattern => $key) {
-          //ksm(array($pattern, $media->{$source_field}->{$property_name}));
           if (preg_match($pattern, $media->{$source_field}->{$property_name}, $matches)) {
             return $matches;
           }
@@ -292,6 +295,8 @@ class Flickr extends MediaTypeBase {
    *
    * @param string $shortcode
    *   The flickr shortcode.
+   *
+   * TODO Add this once Flickr API is ready.
    */
   protected function fetchFlickr($shortcode) {
     $flickr = &drupal_static(__FUNCTION__);
