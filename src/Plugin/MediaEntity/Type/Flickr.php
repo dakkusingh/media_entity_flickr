@@ -10,7 +10,7 @@ use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaTypeBase;
 use Drupal\media_entity\MediaTypeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Flickr\Flickr as FlickrApi;
+// use Flickr\Flickr as FlickrApi;
 
 /**
  * Provides media type plugin for Flickr.
@@ -80,8 +80,7 @@ class Flickr extends MediaTypeBase {
    * @var array
    */
   public static $validationRegexp = array(
-    '@((http|https):){0,1}//(www\.){0,1}flickr\.com/p/(?<shortcode>[a-z0-9_-]+)@i' => 'shortcode',
-    '@((http|https):){0,1}//(www\.){0,1}instagr\.am/p/(?<shortcode>[a-z0-9_-]+)@i' => 'shortcode',
+    '@((http|https):){0,1}//(www\.){0,1}flickr\.com/photos/(?<username>[^\s]+)/(?<shortcode>[a-z0-9_-]+)@i' => 'shortcode',
   );
 
   /**
@@ -90,6 +89,7 @@ class Flickr extends MediaTypeBase {
   public function providedFields() {
     $fields = array(
       'shortcode' => $this->t('Flickr shortcode'),
+      'username' => $this->t('Author of the post'),
     );
 
     if ($this->configuration['use_flickr_api']) {
@@ -99,7 +99,6 @@ class Flickr extends MediaTypeBase {
         'thumbnail' => $this->t('Link to the thumbnail'),
         'thumbnail_local' => $this->t("Copies thumbnail locally and return it's URI"),
         'thumbnail_local_uri' => $this->t('Returns local URI of the thumbnail'),
-        'username' => $this->t('Author of the post'),
         'caption' => $this->t('Caption'),
         'tags' => $this->t('Tags'),
       );
@@ -119,6 +118,14 @@ class Flickr extends MediaTypeBase {
     }
 
     if ($name == 'shortcode') {
+      return $matches['shortcode'];
+    }
+
+    if (!$matches['username']) {
+      return FALSE;
+    }
+
+    if ($name == 'username') {
       return $matches['shortcode'];
     }
 
@@ -265,12 +272,13 @@ class Flickr extends MediaTypeBase {
    */
   protected function matchRegexp(MediaInterface $media) {
     $matches = array();
-
+    //ksm($this->configuration['source_field']);
     if (isset($this->configuration['source_field'])) {
       $source_field = $this->configuration['source_field'];
       if ($media->hasField($source_field)) {
         $property_name = $media->{$source_field}->first()->mainPropertyName();
         foreach (static::$validationRegexp as $pattern => $key) {
+          //ksm(array($pattern, $media->{$source_field}->{$property_name}));
           if (preg_match($pattern, $media->{$source_field}->{$property_name}, $matches)) {
             return $matches;
           }
