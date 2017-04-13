@@ -13,7 +13,7 @@ provider plugin) for [Media Entity Module](https://www.drupal.org/project/media_
 6. Edit the bundle again, and select the field created above as the **Flickr source field**.
 
 ## Usage
-[Check Usage guide](_documentation/USAGE.md)
+[Check Usage Guide](_documentation/USAGE.md)
 
 ## Integration with Flickr API
 ### Without Flickr API
@@ -21,3 +21,14 @@ If you need just to embedded pics, you can use this module without using Flickr'
 
 ### With Flickr API
 TODO - Flickr API for Drupal 8 does not exist yet.
+
+## Integration with Lightning Media
+**Media Entity Flickr** can be used with its companion module for Lightning Media. More information can be found at https://www.drupal.org/project/lightning_media_flickr and https://github.com/dakkusingh/lightning_media_flickr
+
+## Project Code
+
+* GitHub
+https://github.com/dakkusingh/media_entity_flickr
+
+* Drupal.org
+https://www.drupal.org/project/media_entity_flickr
