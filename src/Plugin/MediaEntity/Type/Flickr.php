@@ -10,7 +10,6 @@ use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaTypeBase;
 use Drupal\media_entity\MediaTypeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-// use Flickr\Flickr as FlickrApi;
 
 /**
  * Provides media type plugin for Flickr.
