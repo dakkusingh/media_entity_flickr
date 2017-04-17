@@ -17,7 +17,14 @@ provider plugin) for [Media Entity Module](https://www.drupal.org/project/media_
 
 ## Integration with Flickr API
 ### Without Flickr API
-If you need just to embedded pics, you can use this module without using Flickr's API. That will give you access to the only field available from the embed code.
+If you need just to embedded pics, you can use this module without using Flickr's API. That will give you access to the only field available from the embed code. Following fields are available from embed code.
+
+* photoid
+* username
+* title
+* thumb_url
+* thumb_height
+* thumb_width
 
 ### With Flickr API
 TODO - Flickr API for Drupal 8 does not exist yet.
