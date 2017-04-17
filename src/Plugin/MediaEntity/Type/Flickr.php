@@ -79,7 +79,8 @@ class Flickr extends MediaTypeBase {
    * @var array
    */
   public static $validationRegexp = array(
-    '@((http|https):){0,1}//(www\.){0,1}flickr\.com/photos/(?<username>[^\s]+)/(?<shortcode>[a-z0-9_-]+)@i' => 'shortcode',
+    //'@((http|https):){0,1}//(www\.){0,1}flickr\.com/photos/(?<username>[^\s]+)/(?<shortcode>[a-z0-9_-]+)@i' => 'shortcode',
+    '@(?P<shortcode>(.*)  href=\"https://www.flickr.com/photos/(?<username>[^\s]+)/(?<imageid>[0-9]+)/(.*)\" title=\"(?P<title>[^.*]+)\"><img src=\"(?P<thumbnail>[^\s]+)\" width=\"(?P<width>[0-9]+)\" height=\"(?P<height>[0-9]+)\" alt=\"(.*)\"></a>(.*))@i' => 'shortcode',
   );
 
   /**
@@ -120,66 +121,67 @@ class Flickr extends MediaTypeBase {
       return $matches['shortcode'];
     }
 
-    if (!$matches['username']) {
-      return FALSE;
-    }
+    switch ($name) {
+      case 'id':
+        if (isset($matches['imageid'])) {
+          return $matches['imageid'];
+        }
+        return FALSE;
 
-    if ($name == 'username') {
-      return $matches['shortcode'];
+      case 'thumbnail':
+        if (isset($matches['thumbnail'])) {
+          return $matches['thumbnail'];
+        }
+        return FALSE;
+
+      case 'thumbnail_local':
+        $directory = $this->configFactory->get('media_entity_flickr.settings')->get('local_images');
+        if (!file_exists($directory)) {
+          file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+        }
+
+        $local_uri = $this->getField($media, 'thumbnail_local_uri');
+        if ($local_uri) {
+          if (file_exists($local_uri)) {
+            return $local_uri;
+          }
+          else {
+            $image_url = $this->getField($media, 'thumbnail');
+            $image_data = file_get_contents($image_url);
+            if ($image_data) {
+              return file_unmanaged_save_data($image_data, $local_uri, FILE_EXISTS_REPLACE);
+            }
+          }
+        }
+        return FALSE;
+
+        case 'thumbnail_local_uri':
+          if (isset($matches['thumbnail'])) {
+            $file_info = pathinfo($matches['thumbnail']);
+            return $this->configFactory->get('media_entity_flickr.settings')->get('local_images') . '/' . $file_info['filename'] . '.' . $file_info['extension'];
+          }
+          return FALSE;
+
+        case 'caption':
+          if (isset($matches['title'])) {
+            return $matches['title'];
+          }
+          return FALSE;
+
+        case 'username':
+          if (isset($matches['username'])) {
+            return $matches['username'];
+          }
+          return FALSE;
     }
 
     // TODO Add this once Flickr API is ready.
     // If we have auth settings return the other fields.
     if ($this->configuration['use_flickr_api'] && $flickr = $this->fetchFlickr($matches['shortcode'])) {
       switch ($name) {
-        case 'id':
-          if (isset($flickr->id)) {
-            return $flickr->id;
-          }
-          return FALSE;
-
         case 'type':
           if (isset($flickr->type)) {
             return $flickr->type;
-          }
-          return FALSE;
-
-        case 'thumbnail':
-          if (isset($flickr->images->thumbnail->url)) {
-            return $flickr->images->thumbnail->url;
-          }
-          return FALSE;
-
-        case 'thumbnail_local':
-          if (isset($flickr->images->thumbnail->url)) {
-            $local_uri = $this->configFactory->get('media_entity_flickr.settings')->get('local_images') . '/' . $matches['shortcode'] . '.' . pathinfo($flickr->images->thumbnail->url, PATHINFO_EXTENSION);
-
-            if (!file_exists($local_uri)) {
-              file_prepare_directory($local_uri, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-
-              $image = file_get_contents($local_uri);
-              file_unmanaged_save_data($image, $local_uri, FILE_EXISTS_REPLACE);
-
-              return $local_uri;
-            }
-          }
-          return FALSE;
-
-        case 'thumbnail_local_uri':
-          if (isset($flickr->images->thumbnail->url)) {
-            return $this->configFactory->get('media_entity_flickr.settings')->get('local_images') . '/' . $matches['shortcode'] . '.' . pathinfo($flickr->images->thumbnail->url, PATHINFO_EXTENSION);
-          }
-          return FALSE;
-
-        case 'username':
-          if (isset($flickr->user->username)) {
-            return $flickr->user->username;
-          }
-          return FALSE;
-
-        case 'caption':
-          if (isset($flickr->caption->text)) {
-            return $flickr->caption->text;
           }
           return FALSE;
 
