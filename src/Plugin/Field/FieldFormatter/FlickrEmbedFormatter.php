@@ -25,7 +25,7 @@ class FlickrEmbedFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $element = array();
+    $element = [];
     foreach ($items as $delta => $item) {
       $element[$delta] = [
         '#type' => 'markup',

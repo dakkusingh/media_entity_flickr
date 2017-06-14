@@ -78,25 +78,25 @@ class Flickr extends MediaTypeBase {
    *
    * @var array
    */
-  public static $validationRegexp = array(
+  public static $validationRegexp = [
     // Album Regex.
     '@(?P<shortcode>(.*)  href=\"https://www.flickr.com/photos/(?<username>[^\s]+)/albums/(?<imageid>[0-9]+)\" title=\"(?P<title>[^.*]+)\"><img src=\"(?P<thumbnail>[^\s]+)\" width=\"(?P<width>[0-9]+)\" height=\"(?P<height>[0-9]+)\" alt=\"(.*)\"></a>(.*))@i' => 'shortcode',
 
     // Image Regex.
     '@(?P<shortcode>(.*)  href=\"https://www.flickr.com/photos/(?<username>[^\s]+)/(?<imageid>[0-9]+)/(.*)\" title=\"(?P<title>[^.*]+)\"><img src=\"(?P<thumbnail>[^\s]+)\" width=\"(?P<width>[0-9]+)\" height=\"(?P<height>[0-9]+)\" alt=\"(.*)\"></a>(.*))@i' => 'shortcode',
-  );
+  ];
 
   /**
    * {@inheritdoc}
    */
   public function providedFields() {
-    $fields = array(
+    $fields = [
       'shortcode' => $this->t('Flickr shortcode'),
       'username' => $this->t('Author of the post'),
-    );
+    ];
 
     if ($this->configuration['use_flickr_api']) {
-      $fields += array(
+      $fields += [
         'id' => $this->t('Media ID'),
         'type' => $this->t('Media type: image or video'),
         'thumbnail' => $this->t('Link to the thumbnail'),
@@ -104,7 +104,7 @@ class Flickr extends MediaTypeBase {
         'thumbnail_local_uri' => $this->t('Returns local URI of the thumbnail'),
         'caption' => $this->t('Caption'),
         'tags' => $this->t('Tags'),
-      );
+      ];
     }
 
     return $fields;
@@ -158,24 +158,24 @@ class Flickr extends MediaTypeBase {
         }
         return FALSE;
 
-        case 'thumbnail_local_uri':
-          if (isset($matches['thumbnail'])) {
-            $file_info = pathinfo($matches['thumbnail']);
-            return $this->configFactory->get('media_entity_flickr.settings')->get('local_images') . '/' . $file_info['filename'] . '.' . $file_info['extension'];
-          }
-          return FALSE;
+      case 'thumbnail_local_uri':
+        if (isset($matches['thumbnail'])) {
+          $file_info = pathinfo($matches['thumbnail']);
+          return $this->configFactory->get('media_entity_flickr.settings')->get('local_images') . '/' . $file_info['filename'] . '.' . $file_info['extension'];
+        }
+        return FALSE;
 
-        case 'caption':
-          if (isset($matches['title'])) {
-            return $matches['title'];
-          }
-          return FALSE;
+      case 'caption':
+        if (isset($matches['title'])) {
+          return $matches['title'];
+        }
+        return FALSE;
 
-        case 'username':
-          if (isset($matches['username'])) {
-            return $matches['username'];
-          }
-          return FALSE;
+      case 'username':
+        if (isset($matches['username'])) {
+          return $matches['username'];
+        }
+        return FALSE;
     }
 
     // TODO Add this once Flickr API is ready.
@@ -231,7 +231,7 @@ class Flickr extends MediaTypeBase {
       '#options' => [
         0 => $this->t('No'),
         // TODO Add this once Flickr API is ready.
-        // 1 => $this->t('Yes'),
+        // 1 => $this->t('Yes'),.
       ],
     ];
 
@@ -271,7 +271,7 @@ class Flickr extends MediaTypeBase {
   /**
    * Runs preg_match on embed code/URL.
    *
-   * @param MediaInterface $media
+   * @param \Drupal\media_entity\MediaInterface $media
    *   Media object.
    *
    * @return array|bool
@@ -280,7 +280,7 @@ class Flickr extends MediaTypeBase {
    * @see preg_match()
    */
   protected function matchRegexp(MediaInterface $media) {
-    $matches = array();
+    $matches = [];
     if (isset($this->configuration['source_field'])) {
       $source_field = $this->configuration['source_field'];
       if ($media->hasField($source_field)) {
@@ -301,7 +301,7 @@ class Flickr extends MediaTypeBase {
    * @param string $shortcode
    *   The flickr shortcode.
    *
-   * TODO Add this once Flickr API is ready.
+   *   TODO Add this once Flickr API is ready.
    */
   protected function fetchFlickr($shortcode) {
     $flickr = &drupal_static(__FUNCTION__);
@@ -359,7 +359,6 @@ class Flickr extends MediaTypeBase {
   public function getDefaultName(MediaInterface $media) {
     // Try to get some fields that need the API, if not available, just use the
     // shortcode as default name.
-
     $username = $this->getField($media, 'username');
     $id = $this->getField($media, 'id');
     if ($username && $id) {
