@@ -31,7 +31,7 @@ If you need just to embedded pics, you can use this module without using Flickr'
 ## Project Code
 
 * GitHub
-[lightning_media_flickr](https://github.com/dakkusingh/lightning_media_flickr) | [media_entity_flickr](https://github.com/dakkusingh/media_entity_flickr)
+[media_entity_flickr](https://github.com/dakkusingh/media_entity_flickr)
 
 * Drupal.org
-[lightning_media_flickr](https://www.drupal.org/project/lightning_media_flickr) | [media_entity_flickr](https://www.drupal.org/project/media_entity_flickr)
+[media_entity_flickr](https://www.drupal.org/project/media_entity_flickr)
