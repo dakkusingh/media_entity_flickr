@@ -6,19 +6,9 @@ flickrmedia_entity_flickr.settings:
       type: string
       label: 'Base folder for thumbnails'
 
-media_entity.bundle.type.flickr:
-  type: mapping
-  label: 'Flickr type configuration'
-  mapping:
-    source_field:
-      type: string
-      label: 'Field with embed code/URL'
-    use_flickr_api:
-      type: boolean
-      label: 'Use Flickr API or not'
-    client_id:
-      type: string
-      label: 'Field with client id'
+media.source.flickr:
+  type: media.source.field_aware
+  label: '"Flickr" media source configuration'
 
 field.formatter.settings.flickr_embed:
   type: mapping

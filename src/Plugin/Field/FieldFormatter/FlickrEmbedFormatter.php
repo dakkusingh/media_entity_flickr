@@ -3,8 +3,8 @@
 namespace Drupal\media_entity_flickr\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FormatterBase;
-use Drupal\media_entity\EmbedCodeValueTrait;
 
 /**
  * Plugin implementation of the 'flickr_embed' formatter.
@@ -19,8 +19,6 @@ use Drupal\media_entity\EmbedCodeValueTrait;
  */
 class FlickrEmbedFormatter extends FormatterBase {
 
-  use EmbedCodeValueTrait;
-
   /**
    * {@inheritdoc}
    */
@@ -34,6 +32,29 @@ class FlickrEmbedFormatter extends FormatterBase {
       ];
     }
     return $element;
+  }
+
+  /**
+   * Extracts the raw embed code from input which may or may not be wrapped.
+   *
+   * @param mixed $value
+   *   The input value. Can be a normal string or a value wrapped by the
+   *   Typed Data API.
+   *
+   * @return string|null
+   *   The raw embed code.
+   */
+  protected function getEmbedCode($value) {
+    if (is_string($value)) {
+      return $value;
+    }
+    elseif ($value instanceof FieldItemInterface) {
+      $class = get_class($value);
+      $property = $class::mainPropertyName();
+      if ($property) {
+        return $value->$property;
+      }
+    }
   }
 
 }
