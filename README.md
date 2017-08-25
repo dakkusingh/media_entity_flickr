@@ -1,6 +1,6 @@
 # Media Entity Flickr
 This module provides Flickr integration (i.e. media type
-provider plugin) for [Media Entity Module](https://www.drupal.org/project/media_entity).
+provider plugin) for Media (i.e. media type provider plugin).
 
 ![media-entity-flickr](_documentation/images/4-flickr-media.jpg)
 
@@ -15,8 +15,7 @@ provider plugin) for [Media Entity Module](https://www.drupal.org/project/media_
 ## Usage
 [Check Usage Guide](_documentation/USAGE.md)
 
-## Integration with Flickr API
-### Without Flickr API
+## Integration with Flickr
 If you need just to embedded pics, you can use this module without using Flickr's API. That will give you access to the only field available from the embed code. Following fields are available from embed code.
 
 * photoid
@@ -25,9 +24,6 @@ If you need just to embedded pics, you can use this module without using Flickr'
 * thumb_url
 * thumb_height
 * thumb_width
-
-### With Flickr API
-TODO - Flickr API for Drupal 8 does not exist yet.
 
 ## Integration with Lightning Media
 **Media Entity Flickr** can be used with its companion module for Lightning Media. More information can be found at https://www.drupal.org/project/lightning_media_flickr and https://github.com/dakkusingh/lightning_media_flickr
