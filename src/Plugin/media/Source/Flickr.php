@@ -5,12 +5,14 @@ namespace Drupal\media_entity_flickr\Plugin\media\Source;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\media\MediaInterface;
 use Drupal\media\MediaSourceBase;
+use Drupal\media\MediaTypeException;
+use Drupal\media\MediaTypeInterface;
 use Drupal\media\MediaSourceFieldConstraintsInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
+use Drupal\Core\Field\FieldTypePluginManagerInterface;
 /**
  * Provides media type plugin for Flickr.
  *
@@ -37,14 +39,23 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
    *   Entity type manager service.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   Entity field manager service.
+   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface|\Drupal\media_entity_flickr\Plugin\media\Source\FieldTypePluginManagerInterface $field_type_manager
+   *   The field type plugin manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
-   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $field_type_manager
-   *   The field type plugin manager service.
+   * @param \Drupal\media_entity_flickr\Plugin\media\Source\RendererInterface $renderer
+   *
+   * @internal param \Drupal\media_entity_flickr\Plugin\media\Source\Client $httpClient
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, ConfigFactoryInterface $config_factory, FieldTypePluginManagerInterface $field_type_manager, Client $httpClient) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              EntityFieldManagerInterface $entity_field_manager,
+                              FieldTypePluginManagerInterface $field_type_manager,
+                              ConfigFactoryInterface $config_factory,
+                              RendererInterface $renderer) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager, $field_type_manager, $config_factory);
-    $this->httpClient = $httpClient;
   }
 
   /**
@@ -57,8 +68,9 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('entity_field.manager'),
+      $container->get('plugin.manager.field.field_type'),
       $container->get('config.factory'),
-      $container->get('plugin.manager.field.field_type')
+      $container->get('renderer')
     );
   }
 
@@ -185,6 +197,13 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
    */
   public function getSourceFieldConstraints() {
     return ['FlickrEmbedCode' => []];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createSourceField(MediaTypeInterface $type) {
+    return parent::createSourceField($type)->set('label', 'Flickr Url');
   }
 
   /**
