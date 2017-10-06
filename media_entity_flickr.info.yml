@@ -4,5 +4,4 @@ type: module
 package: Media
 core: 8.x
 dependencies:
-  - drupal:media
-  - drupal:system (>= 8.4.0)
+  - drupal:media (>= 8.4)
