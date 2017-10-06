@@ -43,9 +43,8 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
    *   The field type plugin manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
-   * @param \Drupal\media_entity_flickr\Plugin\media\Source\RendererInterface $renderer
-   *
-   * @internal param \Drupal\media_entity_flickr\Plugin\media\Source\Client $httpClient
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -55,7 +54,13 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
                               FieldTypePluginManagerInterface $field_type_manager,
                               ConfigFactoryInterface $config_factory,
                               RendererInterface $renderer) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager, $field_type_manager, $config_factory);
+    parent::__construct($configuration,
+                        $plugin_id,
+                        $plugin_definition,
+                        $entity_type_manager,
+                        $entity_field_manager,
+                        $field_type_manager,
+                        $config_factory);
   }
 
   /**
