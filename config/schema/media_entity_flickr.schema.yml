@@ -1,4 +1,4 @@
-flickrmedia_entity_flickr.settings:
+media_entity_flickr.settings:
   type: config_object
   label: 'Media entity Flickr settings'
   mapping:
@@ -12,7 +12,7 @@ media.source.flickr:
 
 field.formatter.settings.flickr_embed:
   type: mapping
-  label: 'Image field display format settings'
+  label: 'Flickr field display format settings'
   mapping:
     width:
       type: integer
