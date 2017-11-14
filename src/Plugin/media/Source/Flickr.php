@@ -114,6 +114,7 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
       // the shortcode as default name.
       $username = $this->getMetadata($media, 'username');
       $id = $this->getMetadata($media, 'id');
+
       if ($username && $id) {
         return $username . ' - ' . $id;
       }
