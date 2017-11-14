@@ -7,6 +7,7 @@ dependencies:
     - media.type.flickr
   module:
     - image
+    - media_entity_flickr
     - user
 id: media.flickr.default
 targetEntityType: media
@@ -25,10 +26,9 @@ content:
     third_party_settings: {  }
   field_media_flickr:
     label: above
-    settings:
-      link_to_entity: false
+    settings: {  }
     third_party_settings: {  }
-    type: string
+    type: flickr_embed
     weight: 6
     region: content
   thumbnail:
