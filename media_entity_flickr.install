@@ -31,7 +31,6 @@ function media_entity_flickr_install() {
 
 }
 
-
 /**
  * Implements hook_requirements().
  */

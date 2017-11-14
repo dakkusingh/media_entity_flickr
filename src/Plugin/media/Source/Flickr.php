@@ -8,11 +8,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\media\MediaInterface;
 use Drupal\media\MediaSourceBase;
-use Drupal\media\MediaTypeException;
 use Drupal\media\MediaTypeInterface;
 use Drupal\media\MediaSourceFieldConstraintsInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
+
 /**
  * Provides media type plugin for Flickr.
  *
