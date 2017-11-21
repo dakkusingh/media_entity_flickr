@@ -108,7 +108,6 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
    * {@inheritdoc}
    */
   public function getMetadata(MediaInterface $media, $attribute_name) {
-
     if ($attribute_name == 'default_name') {
       // Try to get some fields that need the API, if not available, just use
       // the shortcode as default name.
@@ -128,7 +127,7 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
       return parent::getMetadata($media, 'default_name');
     }
     elseif ($attribute_name == 'thumbnail_uri') {
-      return parent::getMetadata($media, 'thumbnail_uri');
+      return $this->getMetadata($media, 'thumbnail_local');
     }
 
     $matches = $this->matchRegexp($media);
@@ -155,18 +154,21 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
         return FALSE;
 
       case 'thumbnail_local':
-        $directory = $this->configFactory->get('media_entity_flickr.settings')->get('local_images');
-        if (!file_exists($directory)) {
-          file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-        }
-
         $local_uri = $this->getMetadata($media, 'thumbnail_local_uri');
+
         if ($local_uri) {
           if (file_exists($local_uri)) {
             return $local_uri;
           }
           else {
+            $directory = $this->configFactory->get('media_entity_flickr.settings')->get('local_images');
+            if (!file_exists($directory)) {
+              file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+            }
+
             $image_url = $this->getMetadata($media, 'thumbnail');
+
+            // TODO Changeme with Guzzle
             $image_data = file_get_contents($image_url);
             if ($image_data) {
               return file_unmanaged_save_data($image_data, $local_uri, FILE_EXISTS_REPLACE);
@@ -225,6 +227,7 @@ class Flickr extends MediaSourceBase implements MediaSourceFieldConstraintsInter
    */
   protected function matchRegexp(MediaInterface $media) {
     $matches = [];
+
     if (isset($this->configuration['source_field'])) {
       $source_field = $this->configuration['source_field'];
       if ($media->hasField($source_field)) {
