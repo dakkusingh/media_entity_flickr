@@ -32,6 +32,15 @@ function media_entity_flickr_install() {
 }
 
 /**
+ * Implements hook_uninstall().
+ */
+function media_entity_flickr_uninstall() {
+  // Delete the field storage. If not removed it will give the following error.
+  // exception Drupal\Core\Config\PreExistingConfigException
+  Drupal::configFactory()->getEditable('field.storage.media.field_media_flickr')->delete();
+}
+
+/**
  * Implements hook_requirements().
  */
 function media_entity_flickr_requirements($phase) {
